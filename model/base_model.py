@@ -83,7 +83,7 @@ class VGGBase(nn.Module):
         conv7_feats = F.relu(self.conv7(out))  # (N, 1024, 19, 19)
 
         # Lower-level feature maps
-        return conv1_2_feats, conv2_2_feats, conv3_3_feats, conv4_3_feats, conv5_3_feats, conv7_feats
+        return conv4_3_feats, conv7_feats
 
     def load_pretrained_layers(self):
         """
