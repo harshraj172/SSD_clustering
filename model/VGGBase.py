@@ -1,3 +1,7 @@
+import torch
+from torch import nn
+import torch.nn.functional as F
+
 class VGGBase(nn.Module):
     """
     VGG base convolutions to produce lower-level feature maps.
