@@ -86,7 +86,7 @@ def find_intersection(set_1, set_2):
     intersection_dims = torch.clamp(upper_bounds - lower_bounds, min=0)  # (n1, n2, 2)
     return intersection_dims[:, :, 0] * intersection_dims[:, :, 1]  # (n1, n2)
 
-  def decimate(tensor, m):
+def decimate(tensor, m):
     """
     Decimate a tensor by a factor 'm', i.e. downsample by keeping every 'm'th value.
     This is used when we convert FC layers to equivalent Convolutional layers, BUT of a smaller size.
@@ -101,7 +101,7 @@ def find_intersection(set_1, set_2):
                                          index=torch.arange(start=0, end=tensor.size(d), step=m[d]).long())
 
     return tensor
-  
+
 def calculate_mAP(det_boxes, det_labels, det_scores, true_boxes, true_labels, true_difficulties):
     """
     Calculate the Mean Average Precision (mAP) of detected objects.
