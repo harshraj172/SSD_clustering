@@ -1,3 +1,7 @@
+import torch
+from model import VGGBase
+from utils import AuxiliaryConvolutions, PredictionConvolutions
+
 class SSD(nn.Module):
     def __init__(self, n_classes):
         super(SSD, self).__init__()
