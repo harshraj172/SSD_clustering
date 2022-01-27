@@ -1,4 +1,3 @@
-from math import sqrt
 import torch
 
 def xy_to_cxcy(xy):
