@@ -9,8 +9,8 @@ class SSD(nn.Module):
         self.n_classes = n_classes
         
         self.base = base_model.VGGBase().cuda()
-        self.aux_convs = AuxiliaryConvolutions().cuda()
-        self.pred_convs = PredictionConvolutions(n_classes).cuda()
+        self.aux_convs = AuxiliaryConvolutions.AuxiliaryConvolutions().cuda()
+        self.pred_convs = PredictionConvolutions.PredictionConvolutions(n_classes).cuda()
         
         self.rescale_factors = nn.Parameter(torch.FloatTensor(1, 512, 1, 1))  # there are 512 channels in conv4_3_feats
         nn.init.constant_(self.rescale_factors, 20)
