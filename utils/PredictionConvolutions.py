@@ -1,3 +1,6 @@
+import torch
+from torch import nn
+
 class PredictionConvolutions(nn.Module):
     """
     Used as the ultimate layer for predicition of the probability for each class
