@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from SSD_clustering.model import VGGBase
+from SSD_clustering.model import base_model
 from SSD_clustering.utils import AuxiliaryConvolutions, PredictionConvolutions
 
 class SSD(nn.Module):
@@ -8,7 +8,7 @@ class SSD(nn.Module):
         super(SSD, self).__init__()
         self.n_classes = n_classes
         
-        self.base = VGGBase().cuda()
+        self.base = base_model.VGGBase().cuda()
         self.aux_convs = AuxiliaryConvolutions().cuda()
         self.pred_convs = PredictionConvolutions(n_classes).cuda()
         
