@@ -1,6 +1,8 @@
 import torch
+from torch import nn
 from SSD_clustering.model import VGGBase
 from SSD_clustering.utils import AuxiliaryConvolutions, PredictionConvolutions
+from SSD_clustering.utils.utils import create_prior_boxes
 
 class SSD(nn.Module):
     def __init__(self, n_classes):
