@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 import torch
 
 class SSDDataset(Dataset):
-    def __init__(self, file_folder, img_folder_path, annotation_folder_path, imgsize=300, label_map, is_test=False, transform=None):
+    def __init__(self, file_folder, img_folder_path, annotation_folder_path, label_map, imgsize=300, is_test=False, transform=None):
         self.img_folder_path = img_folder_path
         self.annotation_folder_path = annotation_folder_path
         self.file_folder = file_folder
@@ -70,7 +70,8 @@ class SSDDataset(Dataset):
         
         return img_box
         
-    def box_resize(self, box, img, dims=(imgsize, imgsize)):
+    def box_resize(self, box, img):
+        dims = (self.imgsize, self.imgsize)
         old_dims = torch.FloatTensor([img.width, img.height, img.width, img.height]).unsqueeze(0)
         new_box = box / old_dims
         new_dims = torch.FloatTensor([dims[1], dims[0], dims[1], dims[0]]).unsqueeze(0)
