@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw
 import xml.etree.ElementTree as ET
 import torch
+from torch.utils.data import Dataset
 
 class SSDDataset(Dataset):
     def __init__(self, file_folder, img_folder_path, annotation_folder_path, label_map, imgsize=300, is_test=False, transform=None):
