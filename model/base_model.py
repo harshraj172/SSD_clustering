@@ -52,18 +52,15 @@ class VGGBase(nn.Module):
         """
         out = F.relu(self.conv1_1(image))  # (N, 64, 300, 300)
         out = F.relu(self.conv1_2(out))  # (N, 64, 300, 300)
-        conv1_2 = out  # (N, 64, 300, 300)
         out = self.pool1(out)  # (N, 64, 150, 150)
 
         out = F.relu(self.conv2_1(out))  # (N, 128, 150, 150)
         out = F.relu(self.conv2_2(out))  # (N, 128, 150, 150)
-        conv2_2_feats = out  # (N, 128, 150, 150)
         out = self.pool2(out)  # (N, 128, 75, 75)
 
         out = F.relu(self.conv3_1(out))  # (N, 256, 75, 75)
         out = F.relu(self.conv3_2(out))  # (N, 256, 75, 75)
         out = F.relu(self.conv3_3(out))  # (N, 256, 75, 75)
-        conv3_3_feats = out  # (N, 256, 75, 75)
         out = self.pool3(out)  # (N, 256, 38, 38), it would have been 37 if not for ceil_mode = True
 
         out = F.relu(self.conv4_1(out))  # (N, 512, 38, 38)
@@ -75,7 +72,6 @@ class VGGBase(nn.Module):
         out = F.relu(self.conv5_1(out))  # (N, 512, 19, 19)
         out = F.relu(self.conv5_2(out))  # (N, 512, 19, 19)
         out = F.relu(self.conv5_3(out))  # (N, 512, 19, 19)
-        conv5_3 = out  # (N, 512, 19, 19)
         out = self.pool5(out)  # (N, 512, 19, 19), pool5 does not reduce dimensions
 
         out = F.relu(self.conv6(out))  # (N, 1024, 19, 19)
@@ -84,7 +80,6 @@ class VGGBase(nn.Module):
 
         # Lower-level feature maps
         return conv4_3_feats, conv7_feats
-
     def load_pretrained_layers(self):
         """
         As in the paper, we use a VGG-16 pretrained on the ImageNet task as the base network.
