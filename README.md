@@ -1,6 +1,6 @@
 # SSD-with-Clustering
 
-> Related Papers:
+##Related Papers:
 
 https://antonylam.github.io/papers/Adaptive_Spatial-Spectral_Dictionary_Learning_for_Hyperspectral_Image_Restoration.pdf
 
