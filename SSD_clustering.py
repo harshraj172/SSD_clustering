@@ -81,6 +81,8 @@ from SSD_clustering.model import ssd, base_model
 from SSD_clustering.utils.torchutils import *
 
 # In[41]:
+#kDataFolder="/content/data"
+kDataFolder="./data"       #TODO: use pathlib.Path
 
 # In[44]:
 
@@ -354,8 +356,8 @@ def main(
     n_clusters=22,
     n_data=500,
     method="m1",
-    img_folder_path="/content/data/VOCdevkit/VOC2012/JPEGImages",
-    annotation_folder_path="/content/data/VOCdevkit/VOC2012/Annotations",
+    img_folder_path=f"{kDataFolder}/VOCdevkit/VOC2012/JPEGImages",
+    annotation_folder_path=f"{kDataFolder}/VOCdevkit/VOC2012/Annotations",
     cluster_visualization=False,
     ToTrain=True,
     TrainWithClustering=True,
@@ -391,6 +393,11 @@ def main(
         momentum - (float, default=0.9) - momentum while optimizing through Adam
         weight_decay - (float, default=5e-4) - weight decay 
     """
+
+    os.makedirs(kDataFolder, exist_ok=True)
+    os.makedirs(img_folder_path, exist_ok=True)
+    os.makedirs(annotation_folder_path, exist_ok=True)
+
 
     # --------------DATASET PREP--------------
     downloadVOC(download=download)  # downloads the VOCDataset
