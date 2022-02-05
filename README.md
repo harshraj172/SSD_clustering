@@ -4,9 +4,12 @@
 1) Make the process Deterministic.
    Possible Reasons of Non-Determinism:
    > os.listdir()
+   > 
    > Feature Vector - Yes
+   > 
    > TSNE
-   > Mini-Batch KMeans
+   > 
+   > Mini-Batch KMeans - No
 
 2) Train with more data.
 
