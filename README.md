@@ -1,6 +1,13 @@
 # SSD-with-Clustering
 
-## Related Papers:
+### TO DO:
+1) Make the process Deterministic.
+
+2) Train with more data.
+
+3) Study better Clustering.
+
+### Related Papers:
 
 https://antonylam.github.io/papers/Adaptive_Spatial-Spectral_Dictionary_Learning_for_Hyperspectral_Image_Restoration.pdf
 
