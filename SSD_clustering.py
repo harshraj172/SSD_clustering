@@ -30,7 +30,7 @@ import xml.etree.ElementTree as ET
 import os
 import json
 import requests
-os.chdir('/content/')
+#os.chdir('/content/')
 import time
 from tqdm.notebook import tqdm
 import warnings
@@ -78,7 +78,7 @@ from SSD_clustering.data.PascalVOC.Dataset import SSDDataset
 from SSD_clustering.utils.utils import *
 from SSD_clustering.utils import AuxiliaryConvolutions, PredictionConvolutions, Loss
 from SSD_clustering.model import ssd, base_model
-from SSD_clustering.torchutils import *
+from SSD_clustering.utils.torchutils import *
 
 # In[41]:
 

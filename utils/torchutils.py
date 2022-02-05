@@ -7,6 +7,7 @@ Created on Mon Mar 16 17:44:29 2020
 
 @author: Manny Ko
 """
+import random
 import numpy as np
 import torch
 
