@@ -3,7 +3,7 @@
 ### TO DO:
 1) Make the process Deterministic.
    Possible Reasons of Non-Determinism:
-   > os.listdir()
+   > os.listdir() - Yes
    > 
    > Feature Vector - Yes
    > 
