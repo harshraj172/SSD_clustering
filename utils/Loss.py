@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 import torch.nn.functional as F
-from SSD_clustering.utils.utils import *
+from utils.utils import *
 
 class MultiBoxLoss(nn.Module):
     """
