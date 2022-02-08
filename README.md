@@ -1,5 +1,11 @@
 # SSD-with-Clustering
 
+## How To Use:
+
+> git clone https://github.com/harshraj172/SSD_clustering.git
+> python /content/SSD_clustering/main.py --img_folder_path /content/data/VOCdevkit/VOC2012/JPEGImages --annotation_folder_path /content/data/VOCdevkit/VOC2012/Annotations --cluster_visualization False
+
+
 ### TO DO:
 1) Make the process Deterministic.
    Possible Reasons of Non-Determinism:
