@@ -352,7 +352,7 @@ def train(model, criterion, optimizer, train_dl, valid_dl, EPOCH, print_feq):
             "{:.4f}".format(np.mean(valid_loss)),
         )
 
-    return np.mean(valid_loss_per_epoch)
+    return valid_loss_per_epoch
 
 
 def data_prep(download, img_folder_path, annotation_folder_path, 
@@ -474,22 +474,12 @@ def trainSSD(
   weight_decay=args.weight_decay,
 ): 
 
-  analysis_df = pd.DataFrame(
-      columns=[
-          "train_with_clustering",
-          "method(Clustering Feature Extraction)",
-          "Gini Index",
-          "mean Valid Loss",
-          "std Valid Loss",
-      ]
-  )
-
   # --------------TRAIN SSD--------------
   img_file_paths = np.array(img_file_paths)
+  valid_loss = []  
 
   if TrainWithClustering:
 
-      valid_loss_per_clust = []
       # define the list models with each cluster data passed to different model
       model_list = nn.ModuleList(
           [ssd.SSD(n_classes).to(device) for i in range(n_clusters)]
@@ -543,7 +533,7 @@ def trainSSD(
               )
 
               # start training
-              valid_loss_per_clust.append(
+              valid_loss.append(
                   train(
                       model,
                       criterion,
@@ -561,19 +551,6 @@ def trainSSD(
               print(f"-------------------------------------------------")
               print()
               print()
-
-      analysis_df.loc[0, "train_with_clustering"] = 1
-      analysis_df.loc[0, "method(Clustering Feature Extraction)"] = method
-      analysis_df.loc[0, "Gini Index"] = np.mean(
-          [
-              gini(class_labels[(cluster_labels == cluster_id)])
-              for cluster_id in np.unique(cluster_labels)
-          ]
-      )
-      analysis_df.loc[0, "max Valid Loss"] = np.amax(valid_loss_per_clust)
-      analysis_df.loc[0, "min Valid Loss"] = np.amin(valid_loss_per_clust)
-      analysis_df.loc[0, "mean Valid Loss"] = np.mean(valid_loss_per_clust)
-      analysis_df.loc[0, "std Valid Loss"] = np.std(valid_loss_per_clust)
 
   else:
       model = ssd.SSD(n_classes).to(device)
@@ -617,13 +594,6 @@ def trainSSD(
       valid_loss = train(
           model, criterion, optimizer, train_dl, valid_dl, EPOCH, print_feq
       )
-      analysis_df.loc[0, "train_with_clustering"] = 0
-      analysis_df.loc[0, "method(Clustering Feature Extraction)"] = ""
-      analysis_df.loc[0, "Gini Index"] = ""
-      analysis_df.loc[0, "max Valid Loss"] = ""
-      analysis_df.loc[0, "min Valid Loss"] = ""
-      analysis_df.loc[0, "mean Valid Loss"] = valid_loss
-      analysis_df.loc[0, "std Valid Loss"] = ""
 
       print()
       print(f"Finished Training for model")
@@ -632,7 +602,7 @@ def trainSSD(
       print()
       print()
 
-  return analysis_df
+  return valid_loss
 
 
 # __name__
