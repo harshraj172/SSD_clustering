@@ -46,6 +46,7 @@ from data.PascalVOC.Dataset import SSDDataset
 from utils.utils import *
 from utils import AuxiliaryConvolutions, PredictionConvolutions, Loss
 from model import ssd, base_model
+import random
 
 # Arguments
 parser = argparse.ArgumentParser()
@@ -76,6 +77,7 @@ parser.add_argument('--save_img', type=bool, default=False)
 
 # Training
 parser.add_argument('--min_cluster_size', type=int, default=5)
+parser.add_argument('--split_size', type=float, default=0.8)
 parser.add_argument('--epochs', type=int, default=10)
 parser.add_argument('--print_feq', type=int, default=100)
 parser.add_argument('--learning_rate', type=float, default=1e-3)
@@ -115,7 +117,7 @@ def onceInit(kCUDA=False, cudadevice=args.cudadevice, seed=args.seed):
 	torch.backends.cudnn.deterministic = True
 	torch.backends.cudnn.enabled = kCUDA
 
-	initSeeds(seed)
+	initSeeds(args.seed)
 
 	return device
 
@@ -382,7 +384,7 @@ def data_prep(download, img_folder_path, annotation_folder_path,
       label_map=label_map,
       transform=transformIMG(),
   )
-  dl = DataLoader(ds, batch_size=BS, collate_fn=ds.collate_fn)
+  dl = DataLoader(ds, batch_size=args.batch_size, collate_fn=ds.collate_fn)
 
   # --------------EXTRACT FEATURES--------------
   X_encoded = []
