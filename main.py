@@ -610,9 +610,10 @@ if __name__=="__main__":
   device = onceInit(kCUDA=True)  # get the device and init random seed
 
   img_file_paths, label_map, class_labels, X_encoded = data_prep(download=args.download, img_folder_path=args.img_folder_path, annotation_folder_path=args.annotation_folder_path, method=args.method)
-  del X_encoded
   
   cluster_labels = clusterANDvisual(X_encoded=X_encoded, img_file_paths=img_file_paths, img_folder_path=args.img_folder_path, n_clusters=args.n_clusters, cluster_visualization=args.cluster_visualization)
+  
+  del X_encoded
 
   valid_loss_per_clus = trainSSD(
 			       img_file_paths=img_file_paths,
@@ -624,4 +625,11 @@ if __name__=="__main__":
 			       TrainWithClustering=args.TrainWithClustering
 			       )
   
-  return class_labels, cluster_labels, valid_loss_per_clus
+  print("class_labels")
+  print(class_labels)
+
+  print("cluster_labels") 
+  print(cluster_labels)
+
+  print("valid_loss_per_clus")
+  print(valid_loss_per_clus)
