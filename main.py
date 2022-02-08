@@ -476,7 +476,7 @@ def trainSSD(
 
   # --------------TRAIN SSD--------------
   img_file_paths = np.array(img_file_paths)
-  valid_loss = []  
+  valid_loss_per_clus = []  
 
   if TrainWithClustering:
 
@@ -533,7 +533,7 @@ def trainSSD(
               )
 
               # start training
-              valid_loss.append(
+              valid_loss_per_clus.append(
                   train(
                       model,
                       criterion,
@@ -591,9 +591,9 @@ def trainSSD(
       )
 
       # start training
-      valid_loss = train(
+      valid_loss_per_clus.append(train(
           model, criterion, optimizer, train_dl, valid_dl, EPOCH, print_feq
-      )
+      ))
 
       print()
       print(f"Finished Training for model")
@@ -602,7 +602,7 @@ def trainSSD(
       print()
       print()
 
-  return valid_loss
+  return valid_loss_per_clus
 
 
 # __name__
@@ -610,16 +610,18 @@ if __name__=="__main__":
   device = onceInit(kCUDA=True)  # get the device and init random seed
 
   img_file_paths, label_map, class_labels, X_encoded = data_prep(download=args.download, img_folder_path=args.img_folder_path, annotation_folder_path=args.annotation_folder_path, method=args.method)
-
+  del X_encoded
+  
   cluster_labels = clusterANDvisual(X_encoded=X_encoded, img_file_paths=img_file_paths, img_folder_path=args.img_folder_path, n_clusters=args.n_clusters, cluster_visualization=args.cluster_visualization)
 
-
-  analysis_df = trainSSD(
-                       img_file_paths=img_file_paths,
-                       class_labels=class_labels, 
-                       cluster_labels=cluster_labels,
-                       label_map=label_map,
-                       img_folder_path=args.img_folder_path,
-                       annotation_folder_path=args.annotation_folder_path,
-                       TrainWithClustering=args.TrainWithClustering
-                       )
+  valid_loss_per_clus = trainSSD(
+			       img_file_paths=img_file_paths,
+			       class_labels=class_labels, 
+			       cluster_labels=cluster_labels,
+			       label_map=label_map,
+			       img_folder_path=args.img_folder_path,
+			       annotation_folder_path=args.annotation_folder_path,
+			       TrainWithClustering=args.TrainWithClustering
+			       )
+  
+  return class_labels, cluster_labels, valid_loss_per_clus
