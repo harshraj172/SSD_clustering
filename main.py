@@ -625,11 +625,12 @@ if __name__=="__main__":
 			       TrainWithClustering=args.TrainWithClustering
 			       )
   
-  print("class_labels")
-  print(class_labels)
+  if args.TrainWithClustering:
+    print("class_labels")
+    print(class_labels)
 
-  print("cluster_labels") 
-  print(cluster_labels)
+    print("cluster_labels") 
+    print(cluster_labels)
 
   print("valid_loss_per_clus")
   print(valid_loss_per_clus)
