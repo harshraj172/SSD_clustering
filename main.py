@@ -289,7 +289,6 @@ def gini(array):
     return (1 - sum(i*i for i in Pi))
 
 def train(model, criterion, optimizer, train_dl, valid_dl, EPOCH, print_feq):
-    valid_loss_per_epoch = []
 
     for epoch in range(1, EPOCH + 1):
         model.train()
@@ -338,8 +337,6 @@ def train(model, criterion, optimizer, train_dl, valid_dl, EPOCH, print_feq):
             pred_loc, pred_sco = model(imgs)
             loss = criterion(pred_loc, pred_sco, boxes, labels)
             valid_loss.append(loss.item())
-        
-        valid_loss_per_epoch.append(np.mean(valid_loss))
 
         print(
             "epoch:",
@@ -352,7 +349,7 @@ def train(model, criterion, optimizer, train_dl, valid_dl, EPOCH, print_feq):
             "{:.4f}".format(np.mean(valid_loss)),
         )
 
-    return valid_loss_per_epoch
+    return np.mean(valid_loss)
 
 
 def data_prep(download, img_folder_path, annotation_folder_path, 
