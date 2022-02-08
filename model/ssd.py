@@ -1,8 +1,8 @@
 from math import sqrt
 import torch
 from torch import nn
-from SSD_clustering.model import base_model
-from SSD_clustering.utils import AuxiliaryConvolutions, PredictionConvolutions
+from model import base_model
+from utils import AuxiliaryConvolutions, PredictionConvolutions
 
 class SSD(nn.Module):
     def __init__(self, n_classes):
