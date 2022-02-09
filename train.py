@@ -1,4 +1,8 @@
-def train(model, criterion, optimizer, train_dl, valid_dl, EPOCH, print_feq):
+import time
+import numpy as np
+from tqdm.notebook import tqdm
+
+def train(model, criterion, optimizer, train_dl, valid_dl, EPOCH, print_feq, device):
 
     for epoch in range(1, EPOCH + 1):
         model.train()
