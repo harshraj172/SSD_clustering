@@ -42,10 +42,10 @@ import torch.nn.functional as F
 import torchvision
 from torchvision import datasets
 
-from data.PascalVOC.Dataset import SSDDataset
-from utils.utils import *
-from utils import AuxiliaryConvolutions, PredictionConvolutions, Loss
-from model import ssd, base_model
+from SSD_clustering.data.PascalVOC.Dataset import SSDDataset
+from SSD_clustering.utils.utils import *
+from SSD_clustering.utils import AuxiliaryConvolutions, PredictionConvolutions, Loss
+from SSD_clustering.model import ssd, base_model
 import random
 
 def_data_folder = "./data"
