@@ -263,3 +263,56 @@ def readURL(url):
     resp = requests.get(url)
     data = json.loads(resp.text)
     return data
+
+
+def plot_(x,y1,y2,row,col,ind,title,xlabel,ylabel,label,isimage=False,color='b'):
+
+    """
+    This function is used for plotting images and graphs (Visualization of end results of model training)
+    Arguments:
+    x - (np.ndarray or list) - an image array
+    y1 - (list) - for plotting graph on left side.
+    y2 - (list) - for plotting graph on right side.
+    row - (int) - row number of subplot 
+    col - (int) - column number of subplot
+    ind - (int) - index number of subplot
+    title - (string) - title of the plot 
+    xlabel - (list) - labels of x axis
+    ylabel - (list) - labels of y axis
+    label - (string) - for adding legend in the plot
+    isimage - (boolean) - True in case of image else False
+    color - (char) - color of the plot (prefered green for training and red for testing).
+    """
+    
+    plt.subplot(row,col,ind)
+    if isimage:
+        plt.imshow(x)
+        plt.title(title)
+        plt.axis('off')
+    else:
+        plt.plot(y1,label=label,color='g'); plt.scatter(x,y1,color='g')
+        if y2!='': plt.plot(y2,color=color,label='validation'); plt.scatter(x,y2,color=color)
+        plt.grid()
+        plt.legend()
+        plt.title(title); plt.xlabel(xlabel); plt.ylabel(ylabel)
+
+def ShowClusterIMG(img_folder_path, img_file_paths, clusterID, 
+				   cluster_labels, n_images=5, save_img=False):
+  iter=0
+  plt.figure(figsize=(13,3))
+  for i,iterator in enumerate(cluster_labels):
+      if iterator == clusterID:
+          img = cv2.imread(img_folder_path+'/'+img_file_paths[i])
+          img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+          plot_(img,"","",1,n_images,iter+1,"cluster="+str(clusterID),"","","",True)
+          iter+=1
+      if iter>=n_images: break
+  if save_img:
+    plt.savefig(f'clustered{clusterID}_images.png', bbox_inches='tight')
+  plt.show()
+
+def gini(array):
+    """Calculate the Gini coefficient of a numpy array."""
+    array = np.array(array)
+    Pi = [np.count_nonzero(array == ele)/len(array) for ele in np.unique(array)]
+    return (1 - sum(i*i for i in Pi))
