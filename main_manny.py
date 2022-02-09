@@ -95,39 +95,6 @@ def myArgs():
     args = parser.parse_args()
     return args
 
-def initSeeds(seed=1):
-	print(f"initSeeds({seed})")
-	random.seed(seed)
-	torch.manual_seed(seed) 	#turn on this 2 lines when torch is being used
-	torch.cuda.manual_seed(seed)
-	np.random.seed(seed)
-
-def get_cuda(cudadevice=args.cudadevice):
-	""" return the best Cuda device """
-	devid = cudadevice
-	#print ('Current cuda device ', devid, torch.cuda.get_device_name(devid))
-	#device = 'cuda:0'	#most of the time torch choose the right CUDA device
-	return torch.device(devid)		#use this device object instead of the device string
-
-def onceInit(kCUDA=False, cudadevice, seed):
-	#print(f"onceInit {cudadevice}")
-	if kCUDA and torch.cuda.is_available():
-		if cudadevice is None:
-			device = get_cuda()
-		else:
-			device = torch.device(cudadevice)
-			torch.cuda.set_device(device)
-	else:
-		device = 'cpu'
-
-	print(f"torchutils.onceInit device = {device}")
-	torch.backends.cudnn.deterministic = True
-	torch.backends.cudnn.enabled = kCUDA
-
-	initSeeds(args.seed)
-
-	return device
-
 def extractFeatures(
     imgs,
     model,
