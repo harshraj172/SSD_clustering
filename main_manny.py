@@ -47,6 +47,7 @@ from SSD_clustering.utils.utils import *
 from SSD_clustering.utils.torchutils import *
 from SSD_clustering.utils import AuxiliaryConvolutions, PredictionConvolutions, Loss
 from SSD_clustering.model import ssd, base_model
+from SSD_clustering.train import train
 import random
 
 def_data_folder = "./data"
