@@ -44,6 +44,7 @@ from torchvision import datasets
 
 from SSD_clustering.data.PascalVOC.Dataset import SSDDataset
 from SSD_clustering.utils.utils import *
+from SSD_clustering.utils.torchutils import *
 from SSD_clustering.utils import AuxiliaryConvolutions, PredictionConvolutions, Loss
 from SSD_clustering.model import ssd, base_model
 import random
@@ -126,36 +127,6 @@ def onceInit(kCUDA=False, cudadevice, seed):
 	initSeeds(args.seed)
 
 	return device
-
-def downloadVOC(save_path=args.save_path, year=args.year, download=args.download):
-    """downloads the PascalVOC Dataset"""
-    datasets.VOCDetection(root=save_path, year=year, download=download, transform=transforms.ToTensor())
-
-def transformIMG(imgsize=args.imgsize, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]):
-    """Resize the raw image, Normalize it"""
-    tsfm = transforms.Compose([
-      transforms.Resize([imgsize, imgsize]),
-      transforms.ToTensor(),
-      transforms.Normalize(mean, std),
-    ])
-    return tsfm
-
-def SampleFromData(img_folder_path, n:int):
-    """Sample img path from the full list of images"""
-    imgFile_names = []
-    for file_ in os.listdir(img_folder_path):
-    imgFile_names.append(file_)
-
-    imgFile_names.sort()
-
-    # return random.sample(imgFile_names, n)
-    return imgFile_names[:n]
-
-def readURL(url):
-    resp = requests.get(url)
-    data = json.loads(resp.text)
-    return data
-
 
 def extractFeatures(
     imgs,
