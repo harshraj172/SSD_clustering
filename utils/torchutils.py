@@ -1,13 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-
-Title: torch utilities.
-	
-Created on Mon Mar 16 17:44:29 2020
-
-@author: Manny Ko
-"""
 import numpy as np
+import random
 import torch
 
 def initSeeds(seed=1):
@@ -25,7 +17,7 @@ def get_cuda(cudadevice='cuda:0'):
 	#device = 'cuda:0'	#most of the time torch choose the right CUDA device
 	return torch.device(devid)		#use this device object instead of the device string
 
-def onceInit(kCUDA=False, cudadevice, seed):
+def onceInit(cudadevice, seed, kCUDA=False):
 	#print(f"onceInit {cudadevice}")
 	if kCUDA and torch.cuda.is_available():
 		if cudadevice is None:
@@ -40,7 +32,7 @@ def onceInit(kCUDA=False, cudadevice, seed):
 	torch.backends.cudnn.deterministic = True
 	torch.backends.cudnn.enabled = kCUDA
 
-	initSeeds(args.seed)
+	initSeeds(seed)
 
 	return device
 
