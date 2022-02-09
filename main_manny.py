@@ -42,12 +42,11 @@ import torch.nn.functional as F
 import torchvision
 from torchvision import datasets
 
-from SSD_clustering.data.PascalVOC.Dataset import SSDDataset
-from SSD_clustering.utils.utils import *
-from SSD_clustering.utils.torchutils import *
-from SSD_clustering.utils import AuxiliaryConvolutions, PredictionConvolutions, Loss
-from SSD_clustering.model import ssd, base_model
-from SSD_clustering.train import train
+from data.PascalVOC.Dataset import SSDDataset
+from utils.utils import *
+from utils import AuxiliaryConvolutions, PredictionConvolutions, Loss
+from model import ssd, base_model
+from train import train
 import random
 
 def_data_folder = "./data"
@@ -181,121 +180,6 @@ def reduce_dim(X, method=args.reduce_dim_method, dim=2):
         Xreduced = trans.fit_transform(X) 
     return Xreduced
 
-def plot_(x,y1,y2,row,col,ind,title,xlabel,ylabel,label,isimage=False,color='b'):
-
-    """
-    This function is used for plotting images and graphs (Visualization of end results of model training)
-    Arguments:
-    x - (np.ndarray or list) - an image array
-    y1 - (list) - for plotting graph on left side.
-    y2 - (list) - for plotting graph on right side.
-    row - (int) - row number of subplot 
-    col - (int) - column number of subplot
-    ind - (int) - index number of subplot
-    title - (string) - title of the plot 
-    xlabel - (list) - labels of x axis
-    ylabel - (list) - labels of y axis
-    label - (string) - for adding legend in the plot
-    isimage - (boolean) - True in case of image else False
-    color - (char) - color of the plot (prefered green for training and red for testing).
-    """
-    
-    plt.subplot(row,col,ind)
-    if isimage:
-        plt.imshow(x)
-        plt.title(title)
-        plt.axis('off')
-    else:
-        plt.plot(y1,label=label,color='g'); plt.scatter(x,y1,color='g')
-        if y2!='': plt.plot(y2,color=color,label='validation'); plt.scatter(x,y2,color=color)
-        plt.grid()
-        plt.legend()
-        plt.title(title); plt.xlabel(xlabel); plt.ylabel(ylabel)
-
-def ShowClusterIMG(img_folder_path, img_file_paths, clusterID, 
-				   cluster_labels, n_images=5, save_img=args.save_img):
-  iter=0
-  plt.figure(figsize=(13,3))
-  for i,iterator in enumerate(cluster_labels):
-      if iterator == clusterID:
-          img = cv2.imread(img_folder_path+'/'+img_file_paths[i])
-          img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-          plot_(img,"","",1,n_images,iter+1,"cluster="+str(clusterID),"","","",True)
-          iter+=1
-      if iter>=n_images: break
-  if save_img:
-    plt.savefig(f'clustered{clusterID}_images.png', bbox_inches='tight')
-  plt.show()
-
-def gini(array):
-    """Calculate the Gini coefficient of a numpy array."""
-    array = np.array(array)
-    Pi = [np.count_nonzero(array == ele)/len(array) for ele in np.unique(array)]
-    return (1 - sum(i*i for i in Pi))
-
-def train(model, criterion, optimizer, train_dl, valid_dl, EPOCH, print_feq):
-
-    for epoch in range(1, EPOCH + 1):
-        model.train()
-        train_loss = []
-
-        for step, (imgs, boxes, labels) in enumerate(train_dl):
-            time_1 = time.time()
-            imgs = imgs.to(device)
-            
-            # boxes = torch.cat((boxes), dim=0)
-            boxes = [box.to(device) for box in boxes]
-            # labels = torch.cat((labels), dim=0)
-            labels = [label.to(device) for label in labels]
-
-            pred_loc, pred_sco = model(imgs)
-
-            loss = criterion(pred_loc, pred_sco, boxes, labels)
-
-            # Backward prop.
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-            # losses.update(loss.item(), images.size(0))
-            train_loss.append(loss.item())
-            if step % print_feq == 0:
-                print(
-                    "epoch:",
-                    epoch,
-                    "\tstep:",
-                    step + 1,
-                    "/",
-                    len(train_dl) + 1,
-                    "\ttrain loss:",
-                    "{:.4f}".format(loss.item()),
-                    "\ttime:",
-                    "{:.4f}".format((time.time() - time_1) * print_feq),
-                    "s",
-                )
-
-        model.eval()
-        valid_loss = []
-        for step, (imgs, boxes, labels) in enumerate(tqdm(valid_dl)):
-            imgs = imgs.to(device)
-            boxes = [box.to(device) for box in boxes]
-            labels = [label.to(device) for label in labels]
-            pred_loc, pred_sco = model(imgs)
-            loss = criterion(pred_loc, pred_sco, boxes, labels)
-            valid_loss.append(loss.item())
-
-        print(
-            "epoch:",
-            epoch,
-            "/",
-            EPOCH + 1,
-            "\ttrain loss:",
-            "{:.4f}".format(np.mean(train_loss)),
-            "\tvalid loss:",
-            "{:.4f}".format(np.mean(valid_loss)),
-        )
-
-    return np.mean(valid_loss)
-
 
 def data_prep(download, img_folder_path, annotation_folder_path, 
 			 n_data=args.n_data, method=args.method):
@@ -390,6 +274,7 @@ def clusterANDvisual(X_encoded, img_file_paths, img_folder_path,
               img_file_paths=img_file_paths,
               clusterID=row,
               cluster_labels=cluster_labels,
+	      save_img=args.save_img
           )
           print()
   return cluster_labels
