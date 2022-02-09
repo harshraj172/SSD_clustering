@@ -1,4 +1,14 @@
+import os
+import json
+import requests
+from PIL import Image, ImageDraw
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+import cv2
+
 import torch
+from torchvision import transforms
+from torchvision import datasets
 
 def xy_to_cxcy(xy):
     """
@@ -235,11 +245,11 @@ def calculate_mAP(det_boxes, det_labels, det_scores, true_boxes, true_labels, tr
     return average_precisions, mean_average_precision
 
 
-def downloadVOC(save_path=args.save_path, year=args.year, download=args.download):
+def downloadVOC(save_path, year, download):
     """downloads the PascalVOC Dataset"""
     datasets.VOCDetection(root=save_path, year=year, download=download, transform=transforms.ToTensor())
 
-def transformIMG(imgsize=args.imgsize, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]):
+def transformIMG(imgsize, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]):
     """Resize the raw image, Normalize it"""
     tsfm = transforms.Compose([
       transforms.Resize([imgsize, imgsize]),
@@ -252,7 +262,7 @@ def SampleFromData(img_folder_path, n:int):
     """Sample img path from the full list of images"""
     imgFile_names = []
     for file_ in os.listdir(img_folder_path):
-    imgFile_names.append(file_)
+        imgFile_names.append(file_)
 
     imgFile_names.sort()
 
