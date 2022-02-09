@@ -1,36 +1,13 @@
 import argparse
-
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
-import xml.etree.ElementTree as ET
-
-# For commands
-import os
-import json
-import requests
+import numpy as np 
+import pandas as pd 
 import pandas.util.testing as tm
 import random
 from math import sqrt
-import time
-from tqdm.notebook import tqdm
 import warnings
 warnings.filterwarnings('ignore')
 
-# For visualization
-from PIL import Image, ImageDraw
-import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
-import seaborn as sns
-import cv2
-import imageio as io
-from pylab import *
 from sklearn.manifold import TSNE
-
-#For model performance
-from sklearn.metrics import pairwise_distances
-from sklearn.metrics.pairwise import cosine_similarity
-from scipy.spatial.distance import cdist
-import joblib
 from sklearn.cluster import MiniBatchKMeans, KMeans
 
 import torch
@@ -44,6 +21,7 @@ from torchvision import datasets
 
 from data.PascalVOC.Dataset import SSDDataset
 from utils.utils import *
+from utils.torchutils import *
 from utils import AuxiliaryConvolutions, PredictionConvolutions, Loss
 from model import ssd, base_model
 from train import train
@@ -94,6 +72,8 @@ def myArgs():
 
     args = parser.parse_args()
     return args
+
+args = myArgs()
 
 def extractFeatures(
     imgs,
@@ -192,7 +172,7 @@ def data_prep(download, img_folder_path, annotation_folder_path,
   method - (str, default='m1') -  different methods for feature extraction
   """
   # --------------DATASET PREP--------------
-  downloadVOC(download=download)  # downloads the VOCDataset
+  downloadVOC(args.save_path, year=args.year, download=download)  # downloads the VOCDataset
 
   # label map dict
   label_map = readURL(
@@ -208,7 +188,7 @@ def data_prep(download, img_folder_path, annotation_folder_path,
       img_folder_path=img_folder_path,
       annotation_folder_path=annotation_folder_path,
       label_map=label_map,
-      transform=transformIMG(),
+      transform=transformIMG(args.imgsize),
   )
   dl = DataLoader(ds, batch_size=args.batch_size, collate_fn=ds.collate_fn)
 
@@ -281,6 +261,7 @@ def clusterANDvisual(X_encoded, img_file_paths, img_folder_path,
 
 
 def trainSSD(
+    device,
     img_file_paths, 
     class_labels,
     cluster_labels,
@@ -341,7 +322,7 @@ def trainSSD(
                   img_folder_path=img_folder_path,
                   annotation_folder_path=annotation_folder_path,
                   label_map=label_map,
-                  transform=transformIMG(),
+                  transform=transformIMG(args.imgsize),
               )
               train_dl = DataLoader(
                   train_ds, batch_size=BS, collate_fn=train_ds.collate_fn
@@ -353,7 +334,7 @@ def trainSSD(
                   img_folder_path=img_folder_path,
                   annotation_folder_path=annotation_folder_path,
                   label_map=label_map,
-                  transform=transformIMG(),
+                  transform=transformIMG(args.imgsize),
               )
               valid_dl = DataLoader(
                   valid_ds, batch_size=BS, collate_fn=valid_ds.collate_fn
@@ -369,6 +350,7 @@ def trainSSD(
                       valid_dl,
                       EPOCH,
                       print_feq,
+                      device
                   )
               )
 
@@ -399,7 +381,7 @@ def trainSSD(
           img_folder_path=img_folder_path,
           annotation_folder_path=annotation_folder_path,
           label_map=label_map,
-          transform=transformIMG(),
+          transform=transformIMG(args.imgsize),
       )
       train_dl = DataLoader(
           train_ds, batch_size=BS, collate_fn=train_ds.collate_fn
@@ -411,7 +393,7 @@ def trainSSD(
           img_folder_path=img_folder_path,
           annotation_folder_path=annotation_folder_path,
           label_map=label_map,
-          transform=transformIMG(),
+          transform=transformIMG(args.imgsize),
       )
       valid_dl = DataLoader(
           valid_ds, batch_size=BS, collate_fn=valid_ds.collate_fn
@@ -419,7 +401,7 @@ def trainSSD(
 
       # start training
       valid_loss_per_clus.append(train(
-          model, criterion, optimizer, train_dl, valid_dl, EPOCH, print_feq
+          model, criterion, optimizer, train_dl, valid_dl, EPOCH, print_feq, device
       ))
 
       print()
@@ -434,7 +416,6 @@ def trainSSD(
 
 # __name__
 if __name__=="__main__":
-    args = myArgs()
     device = onceInit(kCUDA=True, cudadevice=args.cudadevice, seed=args.seed)  # get the device and init random seed
 
     img_file_paths, label_map, class_labels, X_encoded = data_prep(
@@ -449,6 +430,7 @@ if __name__=="__main__":
     del X_encoded
 
     valid_loss_per_clus = trainSSD(
+        device=device,
         img_file_paths=img_file_paths,
         class_labels=class_labels, 
         cluster_labels=cluster_labels,
