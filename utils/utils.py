@@ -233,3 +233,33 @@ def calculate_mAP(det_boxes, det_labels, det_scores, true_boxes, true_labels, tr
     average_precisions = {rev_label_map[c + 1]: v for c, v in enumerate(average_precisions.tolist())}
 
     return average_precisions, mean_average_precision
+
+
+def downloadVOC(save_path=args.save_path, year=args.year, download=args.download):
+    """downloads the PascalVOC Dataset"""
+    datasets.VOCDetection(root=save_path, year=year, download=download, transform=transforms.ToTensor())
+
+def transformIMG(imgsize=args.imgsize, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]):
+    """Resize the raw image, Normalize it"""
+    tsfm = transforms.Compose([
+      transforms.Resize([imgsize, imgsize]),
+      transforms.ToTensor(),
+      transforms.Normalize(mean, std),
+    ])
+    return tsfm
+
+def SampleFromData(img_folder_path, n:int):
+    """Sample img path from the full list of images"""
+    imgFile_names = []
+    for file_ in os.listdir(img_folder_path):
+    imgFile_names.append(file_)
+
+    imgFile_names.sort()
+
+    # return random.sample(imgFile_names, n)
+    return imgFile_names[:n]
+
+def readURL(url):
+    resp = requests.get(url)
+    data = json.loads(resp.text)
+    return data
