@@ -61,7 +61,7 @@ def main(images, n_clusters):
     """
 
 if __name__=="__main__":
-    Input = images
+    images = Input
     main(images, n_cluster=22)
 ```
 
