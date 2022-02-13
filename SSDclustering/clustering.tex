@@ -1,0 +1,46 @@
+\newpage
+\section{Clustering}
+There are two distinct set of approaches to our clustering:
+\begin{enumerate}
+\item cluster the input images
+  \begin{enumerate}
+   \item simple region covariance \ref{regcov}
+   \item some form of non-Local Means (NLM)
+\end{enumerate}
+\item cluster the feature vectors of a pre-trained model
+\end{enumerate}
+
+There the algorithm to perform the clustering also deserve some investigation.
+K-means is certain a starting point but it is very sensitive to initialization.
+Next, the question of producing a quasi balanced cluster should also be considered.
+
+If we are using a NLM approach, naive approach will make $k$ passes for $k$ clusters
+while testing for nearest center. At least we need a fast lookup structure so 
+that the nearest center can be retrieved in $O(logn)$ or $O(1)$ time.
+Or use the very nice SigmaSet \ref{sigmaset} or \cite{Kwatra2010}
+
+\subsection{Region Covariance}
+Region covariance can be computed very efficiently using 'integral images/sumarea table" \cite{Porikli2006}.
+
+\href{https://spie.org/news/0368-using-covariance-improves-computer-detection-and-tracking-of-humans?SSO=1}{Using covariance improves computer detection and tracking of humans}
+
+\subsubsection{\cite{Tuzel2006}}\label{regcov}
+"Region covariance: A fast descriptor for detection and classification"
+
+\subsubsection{Sigma set}\label{sigmaset}
+\cite{Chang2009} 
+
+\subsection{Kwatra2010}
+"Fast Covariance Computation and
+Dimensionality Reduction for Sub-Window Features in Images"
+
+\subsubsection{Faulkner2015}
+\cite{Faulkner2015} "A Study of the Region Covariance Descriptor: Impact of Feature Selection and Image Transformations"
+
+\subsection{Non-Local Means}
+\subsubsection{Qian2013}
+\cite{Qian2013} 
+nonlocal similarity and spectral-spatial structure of hyperspectral imagery into sparse representation. Non-locality means the self-similarity of image, by which a whole image can be partitioned into some groups containing similar patches. The similar patches in each group are sparsely represented with a shared subset of atoms in a dictionary making true signal and noise more easily separated.
+
+\subsubsection{Fu2017}
+\cite{Fu2017}

@@ -1,0 +1,124 @@
+%\documentclass[oneside,12pt]{article}
+\documentclass[oneside]{article}
+%\documentclass[12pt]{report}
+%\documentclass[12pt,a4paper,english,danish]{report}
+
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage[pdftex]{graphicx}
+\usepackage{epstopdf}
+%\usepackage{epsfig}
+\usepackage{listings}
+\usepackage{subfig}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+%\usepackage{enumerate}
+%\usepackage[latin1]{inputenc}
+%\usepackage{url}
+
+\usepackage{color}                       % colors
+\definecolor{lightgrey}{rgb}{0.9,0.9,0.9} % color values Red, Green, Blue
+\definecolor{lightred}{rgb}{0.9,0.7,0.7} % color values Red, Green, Blue
+\definecolor{lightgreen}{rgb}{0.7,0.9,0.7} % color values Red, Green, Blue
+\definecolor{lightblue}{rgb}{0.5,0.7,0.9} % color values Red, Green, Blue
+\definecolor{blue}{rgb}{0.0,0.43,0.72}
+\definecolor{red}{rgb}{0.6,0.0,0.0}
+
+\includeonly{clustering, SSD}
+
+\lstset{keywordstyle=\color{blue}\bfseries}
+\lstset{emph={tex2D,tex2Dlod,tex2Dproj,tex3D},emphstyle=\color{red}\bfseries,emph={[2]float2,float3,float4,matrix4x4,matrix3x3}, emphstyle={[2]\color{blue}\bfseries} }
+
+\lstset{ %
+language=C,                % choose the language of the code
+basicstyle=\footnotesize\ttfamily,       % the size of the fonts that are used for the code
+numbers=none,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=2,                   % the step between two line-numbers. If it's 1 each line will be numbered
+numbersep=5pt,                  % how far the line-numbers are from the code
+backgroundcolor=\color{lightgrey},  % choose the background color. You must add \usepackage{color}
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,                   % adds a frame around the code
+tabsize=2,                      % sets default tabsize to 2 spaces
+captionpos=b,                   % sets the caption-position to bottom
+breaklines=true,                % sets automatic line breaking
+breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+escapeinside={\%*}{*)}          % if you want to add a comment within your code
+}
+
+
+
+\newcommand{\reff}[1]{(\ref{#1})}
+\newcommand{\captionx}[1]{\centering\begin{minipage}{.80\textwidth}\caption{#1}\end{minipage}}
+
+\DeclareMathOperator*{\mle}{arg\; max} 
+
+
+\begin{document}
+
+\title{SSD Clustering}
+\author{Manny Ko  
+}
+\maketitle
+
+\begin{abstract}
+
+
+
+\end{abstract}
+%\clearpage
+
+
+%\tableofcontents
+
+%\clearpage
+
+\section{Introduction}
+\label{intro}
+The premise of this investigation is to use a form of clustering to drive
+the training of deep learning models. With clusters, we hope to promote
+small intra-cluster variability and reduce the need for large capacity models
+by training a model for each cluster.
+With that a corresponding reducing in the amount of training data.
+
+%
+% Clustering
+%
+\include{clustering}
+
+%
+% SSD
+%
+\include{SSD}
+                                                                                             
+%
+% my research and implementation notes - not for publication
+%
+%\include{my_notes}
+
+%\clearpage
+
+\section{Conclusion}
+
+\section{Remarks}
+
+
+\vspace{24pt} \noindent\textbf{Acknowledgments.}{\small \quad
+Finally, thank you to my family and friends for the support during this report.
+}
+
+
+
+\bibliographystyle{alpha}
+\small{\bibliography{my-refs}}
+
+
+
+
+%\appendix
+
+\end{document}

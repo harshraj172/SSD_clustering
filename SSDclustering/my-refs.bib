@@ -1,0 +1,88 @@
+@article{Qian2013,
+abstract = {Noise reduction is an active research area in image processing due to its importance in improving the quality of image for object detection and classification. In this paper, we develop a sparse representation based noise reduction method for hyperspectral imagery, which is dependent on the assumption that the non-noise component in an observed signal can be sparsely decomposed over a redundant dictionary while the noise component does not have this property. The main contribution of the paper is in the introduction of nonlocal similarity and spectral-spatial structure of hyperspectral imagery into sparse representation. Non-locality means the self-similarity of image, by which a whole image can be partitioned into some groups containing similar patches. The similar patches in each group are sparsely represented with a shared subset of atoms in a dictionary making true signal and noise more easily separated. Sparse representation with spectral-spatial structure can exploit spectral and spatial joint correlations of hyperspectral imagery by using 3-D blocks instead of 2-D patches for sparse coding, which also makes true signal and noise more distinguished. Moreover, hyperspectral imagery has both signal-independent and signal-dependent noises, so a mixed Poisson and Gaussian noise model is used. In order to make sparse representation be insensitive to the various noise distribution in different blocks, a variance-stabilizing transformation (VST) is used to make their variance comparable. The advantages of the proposed methods are validated on both synthetic and real hyperspectral remote sensing data sets. {\textcopyright} 2008-2012 IEEE.},
+author = {Qian, Yuntao and Ye, Minchao},
+doi = {10.1109/JSTARS.2012.2232904},
+issn = {19391404},
+journal = {IEEE J of Selected Topics in Applied Earth Observations and Remote Sensing},
+keywords = {Hyperspectral imagery,noise reduction,nonlocal similarity,sparse representation,variance-stabilizing transformation},
+number = {2},
+pages = {499--515},
+publisher = {IEEE},
+title = {{Hyperspectral imagery restoration using nonlocal spectral-spatial structured sparse representation with noise estimation}},
+volume = {6},
+year = {2013}
+}
+
+@article{Fu2017,
+abstract = {Hyperspectral imaging is beneficial in a diverse range of applications from diagnostic medicine, to agriculture, to surveillance to name a few. However, hyperspectral images often suffer from degradation such as noise and low resolution. In this paper, we propose an effective model for hyperspectral image (HSI) restoration, specifically image denoising and super-resolution. Our model considers three underlying characteristics of HSIs: sparsity across the spatial-spectral domain, high correlation across spectra, and non-local self-similarity over space. We first exploit high correlation across spectra and non-local self-similarity over space in the degraded HSI to learn an adaptive spatial-spectral dictionary. Then, we employ the local and non-local sparsity of the HSI under the learned spatial-spectral dictionary to design an HSI restoration model, which can be effectively solved by an iterative numerical algorithm with parameters that are adaptively adjusted for different clusters and different noise levels. In experiments on HSI denoising, we show that the proposed method outperforms many state-of-the-art methods under several comprehensive quantitative assessments. We also show that our method performs well on HSI super-resolution.},
+author = {Fu, Ying and Lam, Antony and Sato, Imari and Sato, Yoichi},
+doi = {10.1007/s11263-016-0921-6},
+issn = {15731405},
+journal = {Int J of Computer Vision},
+keywords = {Adaptive spatial-spectral dictionary learning,High correlation across spectra,Hyperspectral image restoration,Non-local sparse representation,Self-similarity},
+mendeley-groups = {DictLearning/HyperSpectral},
+number = {2},
+pages = {228--245},
+title = {{Adaptive Spatial-Spectral Dictionary Learning for Hyperspectral Image Restoration}},
+volume = {122},
+year = {2017}
+}
+
+@inproceedings{Tuzel2006,
+author = {Tuzel, Oncel and Porikli, Fatih and Meer, Peter},
+booktitle = {ECCV '06},
+mendeley-groups = {ImageProc/FeatureVector/Shape,ImageProc/FeatureVector/Moments},
+pages = {589--600},
+title = {{Region covariance: A fast descriptor for detection and classification}},
+year = {2006}
+}
+
+@article{Porikli2006,
+abstract = {We propose an integral image based algorithm to extract feature covariance matrices of all possible rectangular regions within a given image. Covariance is an essential indicator of how much the deviation of two or more variables match. In our case, these variables correspond to point-wise features, e.g. coordinates, color values, gradients, edge magnitude and orientation, local histograms, filter responses, etc. We significantly improve the speed of the covariance computation by taking advantage of the spatial arrangement of image points using integral images, which are intermediate representations used for calculation of region sums. Each point of the integral image corresponds to the summation of all point values inside the feature image rectangle bounded by the upper left corner and the point of interest. Using this representation, any rectangular region sum can be computed in constant time. We follow a similar idea for fast calculation of region covariance. We construct integral images for all separate features as well as integral images of the multiplication of any two feature combinations. Using these set of integral images and region corner point coordinates, we directly extract the covariance matrix coefficients. We show that the proposed method reduces the computational load to quadratic time},
+author = {Porikli, Fatih and Tuzel, Oncel},
+doi = {10.1109/ICIP.2006.312610},
+isbn = {1424404819},
+issn = {15224880},
+journal = {ICIP '06},
+keywords = {Covariance matrices,Integral images},
+mendeley-groups = {ImageProc/FeatureVector/Moments},
+pages = {1581--1584},
+title = {{Fast construction of covariance matrices for arbitrary size image windows}},
+year = {2006}
+}
+
+@inproceedings{Faulkner2015,
+abstract = {We analyse experimentally the region covariance descriptor which has proven useful in numerous computer vision applications. The properties of the descriptor-despite its widespread deployment-are not well understood or documented. In an attempt to uncover key attributes of the descriptor, we characterise the interdependence between the choice of features and distance measures through a series of meticulously designed and performed experiments. Our results paint a rather complex picture and underscore the necessity for more extensive empirical and theoretical work. In light of our findings, there is reason to believe that the region covariance descriptor will prove useful for methods that perform image super-resolution, deblurring, and denoising based on matching and retrieval of image patches from an image dictionary.},
+author = {Faulkner, Hayden and Shehu, Ergnoor and Szpak, Zygmunt L. and Chojnacki, Wojciech and Tapamo, Jules R. and Dick, Anthony and {Van Den Hengel}, Anton},
+booktitle = {DICTA '15},
+doi = {10.1109/DICTA.2015.7371222},
+isbn = {9781467367950},
+pages = {8},
+title = {{A Study of the Region Covariance Descriptor: Impact of Feature Selection and Image Transformations}},
+year = {2015}
+}
+
+@inproceedings{Chang2009,
+abstract = {Given an image region of pixels, second order statistics can be used to construct a descriptor for object representation. One example is the covariance matrix descriptor, which shows high discriminative power and good robustness in many computer vision applications. However, operations for the covariance matrix on Riemannian manifolds are usually computationally demanding. This paper proposes a novel second order statistics based region descriptor, named "Sigma Set", in the form of a small set of vectors, which can be uniquely constructed through Cholesky decomposition on the covariance matrix. Sigma Set is of low dimension, powerful and robust. Moreover, compared with the covariance matrix, Sigma Set is not only more efficient in distance evaluation and average calculation, hut also easier to be enriched with first order statistics. Experimental results in texture classification and object tracking verify, the effectiveness and efficiency of this novel object descriptor.},
+author = {Hong, Xiaopeng and Chang, Hong and Shan, Shiguang and Chen, Xilin and Gao, Wen},
+booktitle = {CVPR Workshops '09},
+doi = {10.1109/CVPRW.2009.5206742},
+isbn = {9781424439935},
+issn = {1063-6919},
+month = {jun},
+pages = {1802--1809},
+publisher = {Ieee},
+title = {{Sigma set: A small second order statistical region descriptor}},
+year = {2009}
+}
+
+@inproceedings{Kwatra2010,
+author = {Kwatra, Vivek and Han, Mei},
+booktitle = {ECCV 2010},
+mendeley-groups = {VR/Rendering/Procedural/TextureSyn,ImageProc/GradientDomain},
+title = {{Fast covariance computation and dimensionality reduction for sub-window features in images}},
+url = {http://www.springerlink.com/index/33T82L8Q0751L4H1.pdf},
+volume = {94043},
+year = {2010}
+}
+
