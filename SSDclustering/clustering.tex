@@ -1,13 +1,13 @@
 \newpage
 \section{Clustering}
-There are two distinct set of approaches to our clustering:
+There are two distinct set of approaches to doing clustering without training:
 \begin{enumerate}
-\item cluster the input images
+\item cluster the feature vectors of a pre-trained model
+\item cluster the input images using:
   \begin{enumerate}
-   \item simple region covariance \ref{regcov}
+   \item "2nd-order" region statistics: e.g. region covariance \ref{regcov} and Sigma-set \ref{sigmaset}
    \item some form of non-Local Means (NLM)
 \end{enumerate}
-\item cluster the feature vectors of a pre-trained model
 \end{enumerate}
 
 There the algorithm to perform the clustering also deserve some investigation.
@@ -19,16 +19,36 @@ while testing for nearest center. At least we need a fast lookup structure so
 that the nearest center can be retrieved in $O(logn)$ or $O(1)$ time.
 Or use the very nice SigmaSet \ref{sigmaset} or \cite{Kwatra2010}
 
-\subsection{Region Covariance}
-Region covariance can be computed very efficiently using 'integral images/sumarea table" \cite{Porikli2006}.
+\subsection{Region Covariance}\label{regcov}
+Region covariance can be computed very efficiently using 'integral images/sumarea table" \cite{Porikli2006, Tuzel2006}. Let $F(x,y) = \phi(I,x,y)$ be the $W\times H\times d$ dimensional feature image extracted from $I$, where $\phi$ can be any mapping
+such as intensity, color, gradients, filter response etc.
+
+The region covariance $\mathbf{C}_R$ is a $d\times d$ matrix of the feature points:
+\begin{equation}
+ \mathbf{C}_R = \frac{1}{n-1}\sum\limits^n_{k=1}(\mathbf{z}_k - \mu) (\mathbf{z}_k - \mu)^T
+\end{equation}
+where $\mu$ is the mean. $\mathbf{C}_R$ is $d\times d$ instead of $n\times d$
+if we are using the raw features. Also, RC does not have any information regarding
+the ordering and the number of points. This implies a certain scale and rotation
+invariance.
+
+Covariance matrices do not lie on Euclidean space, a distance metric involving generalized eigenvalues follows from the Lie group structure of positive definite matrices:
+\begin{equation}
+ \rho(\mathbf{C}_1, \mathbf{C}_2) = \sqrt{\sum\limits^n_{k=1} ln^2 \lambda_i(\mathbf{C}_1, \mathbf{C}_2)}
+\end{equation}
+where $\lambda_i(\mathbf{C}_1, \mathbf{C}_2)$ are the generalized eigenvalues
+of $\mathbf{C}_1$ and $\mathbf{C}_2$ computed from 
+$\lambda_i\mathbf{C}_1\mathbf{x}_i - \lambda_i\mathbf{C}_2\mathbf{x}_i$
+and $\mathbf{x}_i \ne 0$ are the generalized eigenvectors.
 
 \href{https://spie.org/news/0368-using-covariance-improves-computer-detection-and-tracking-of-humans?SSO=1}{Using covariance improves computer detection and tracking of humans}
 
-\subsubsection{\cite{Tuzel2006}}\label{regcov}
-"Region covariance: A fast descriptor for detection and classification"
 
 \subsubsection{Sigma set}\label{sigmaset}
-\cite{Chang2009} 
+\cite{Chang2009} proposes a novel 2nd-order statistics based region descriptor, named "Sigma Set", in the form of a small set of vectors, which can be uniquely constructed through Cholesky decomposition on the covariance matrix.
+This is basically an optimized form of region covariance using sparsity.
+
+for any matrix $A$ that satisfies $C_R=AA^T$, the set of columns of $A$ has the same 2nd order statistics as $R$. More specifically, we can construct the Sigma Set descriptor for region $R$ through Cholesky decomposition
 
 \subsection{Kwatra2010}
 "Fast Covariance Computation and
@@ -36,6 +56,15 @@ Dimensionality Reduction for Sub-Window Features in Images"
 
 \subsubsection{Faulkner2015}
 \cite{Faulkner2015} "A Study of the Region Covariance Descriptor: Impact of Feature Selection and Image Transformations"
+
+\subsection{K-means}
+
+\subsubsection{Balanced K-means}
+\cite{Malinen2014} 
+in k-means assignment phase, the algorithm solves the assignment problem by Hungarian algorithm with time complexity $O(n^3)$.
+
+\subsubsection{Balanced K-means \& min-cut}
+\cite{Chang2014}
 
 \subsection{Non-Local Means}
 \subsubsection{Qian2013}
