@@ -43,8 +43,8 @@ def myArgs():
     parser.add_argument('--save_path', type=str, default='./data/')
     parser.add_argument('--year', type=str, default='2012')
     parser.add_argument('--data', type=str, default=def_data_folder)
-    parser.add_argument('--img_folder_path', type=str, default=None)
-    parser.add_argument('--annotation_folder_path', type=str, default=None)
+    parser.add_argument('--img_folder_path', type=str, default=def_img_folder)
+    parser.add_argument('--annotation_folder_path', type=str, default=def_annotation_folder)
     parser.add_argument('--download', type=eval, default=True)
     parser.add_argument('--n_classes', type=int, default=21)
     parser.add_argument('--imgsize', type=int, default=300)
@@ -417,6 +417,8 @@ def trainSSD(
 # __name__
 if __name__=="__main__":
     device = onceInit(kCUDA=True, cudadevice=args.cudadevice, seed=args.seed)  # get the device and init random seed
+    os.makedirs(os.path.dirname(args.img_folder_path), exist_ok=True)  
+    os.makedirs(os.path.dirname(args.annotation_folder_path), exist_ok=True)  
 
     img_file_paths, label_map, class_labels, X_encoded = data_prep(
         download=args.download, 
