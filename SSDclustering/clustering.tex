@@ -32,7 +32,9 @@ if we are using the raw features. Also, RC does not have any information regardi
 the ordering and the number of points. This implies a certain scale and rotation
 invariance.
 
-Covariance matrices do not lie on Euclidean space, a distance metric involving generalized eigenvalues follows from the Lie group structure of positive definite matrices:
+Covariance matrices do not lie on Euclidean space, a distance metric
+\cite{Forstner1999}\footnote{this is called "affine-invariant" distance}
+ involving generalized eigenvalues follows from the Lie group structure of positive definite matrices:
 \begin{equation}
  \rho(\mathbf{C}_1, \mathbf{C}_2) = \sqrt{\sum\limits^n_{k=1} ln^2 \lambda_i(\mathbf{C}_1, \mathbf{C}_2)}
 \end{equation}
@@ -48,7 +50,9 @@ and $\mathbf{x}_i \ne 0$ are the generalized eigenvectors.
 \cite{Chang2009} proposes a novel 2nd-order statistics based region descriptor, named "Sigma Set", in the form of a small set of vectors, which can be uniquely constructed through Cholesky decomposition on the covariance matrix.
 This is basically an optimized form of region covariance using sparsity.
 
-for any matrix $A$ that satisfies $C_R=AA^T$, the set of columns of $A$ has the same 2nd order statistics as $R$. More specifically, we can construct the Sigma Set descriptor for region $R$ through Cholesky decomposition
+for any matrix $A$ that satisfies $C_R=AA^T$, the set of columns of $A$ has the same 2nd order statistics as $R$. More specifically, we can construct the Sigma Set descriptor for region $R$ through Cholesky decomposition...
+
+An example application of sigma-set \cite{Uzair2013}.
 
 \subsection{Kwatra2010}
 "Fast Covariance Computation and
