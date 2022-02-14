@@ -5,7 +5,12 @@ There are two distinct set of approaches to doing clustering without training:
 \item cluster the feature vectors of a pre-trained model
 \item cluster the input images using:
   \begin{enumerate}
-   \item "2nd-order" region statistics: e.g. region covariance \ref{regcov} and Sigma-set \ref{sigmaset}
+   \item "2nd-order" region statistics: e.g. 
+	 \begin{enumerate}
+		\item region covariance \ref{regcov} (RC).
+		\item Sigma-set \ref{sigmaset} is a condensed RC. One of its attraction is
+	    being able to work with difference sized regions (think patches or SuperPixels). 
+	 \end{enumerate} 
    \item some form of non-Local Means (NLM)
 \end{enumerate}
 \end{enumerate}
@@ -20,9 +25,6 @@ that the nearest center can be retrieved in $O(logn)$ or $O(1)$ time.
 Or use the very nice SigmaSet \ref{sigmaset} or \cite{Kwatra2010}
 
 \subsection{Region Covariance}\label{regcov}
-Region covariance can be computed very efficiently using 'integral images/sumarea table" \cite{Porikli2006, Tuzel2006}. Let $F(x,y) = \phi(I,x,y)$ be the $W\times H\times d$ dimensional feature image extracted from $I$, where $\phi$ can be any mapping
-such as intensity, color, gradients, filter response etc.
-
 The region covariance $\mathbf{C}_R$ is a $d\times d$ matrix of the feature points:
 \begin{equation}
  \mathbf{C}_R = \frac{1}{n-1}\sum\limits^n_{k=1}(\mathbf{z}_k - \mu) (\mathbf{z}_k - \mu)^T
@@ -32,9 +34,25 @@ if we are using the raw features. Also, RC does not have any information regardi
 the ordering and the number of points. This implies a certain scale and rotation
 invariance.
 
-Covariance matrices do not lie on Euclidean space, a distance metric
-\cite{Forstner1999}\footnote{this is called "affine-invariant" distance}
- involving generalized eigenvalues follows from the Lie group structure of positive definite matrices:
+The covariance matrix proposes a natural way of fusing multiple features
+which might be correlated. The diagonal entries of the covariance matrix represent the variance of each feature and the nondiagonal entries represent the correlations.
+
+There are several advantages of using covariance matrices as region descriptors. A
+single covariance matrix extracted from a region is usually enough to match the
+region in different views and poses. In fact we assume that the covariance of a
+distribution is enough to discriminate it from other distributions.
+
+Region covariance can be computed very efficiently using 'integral images/sumarea table" \cite{Porikli2006, Tuzel2006}. Let $F(x,y) = \phi(I,x,y)$ be the $W\times H\times d$ dimensional feature image extracted from $I$, where $\phi$ can be any mapping
+such as intensity, color, gradients, filter response etc.
+
+See an early application of region covariance 
+\href{https://spie.org/news/0368-using-covariance-improves-computer-detection-and-tracking-of-humans?SSO=1}{Using covariance improves computer detection and tracking of humans}.
+
+
+\subsubsection{Metrics for Covariance}
+Covariance matrices do not lie on Euclidean space. There are two commonly used
+metrics - 1) log-Euclidean 2) "affine-invariant" distance \cite{Forstner1999}.
+The affine-invariant" distance is computed using generalized eigenvalues which follows from the Lie group structure of positive definite matrices (PD):
 \begin{equation}
  \rho(\mathbf{C}_1, \mathbf{C}_2) = \sqrt{\sum\limits^n_{k=1} ln^2 \lambda_i(\mathbf{C}_1, \mathbf{C}_2)}
 \end{equation}
@@ -43,14 +61,21 @@ of $\mathbf{C}_1$ and $\mathbf{C}_2$ computed from
 $\lambda_i\mathbf{C}_1\mathbf{x}_i - \lambda_i\mathbf{C}_2\mathbf{x}_i$
 and $\mathbf{x}_i \ne 0$ are the generalized eigenvectors.
 
-\href{https://spie.org/news/0368-using-covariance-improves-computer-detection-and-tracking-of-humans?SSO=1}{Using covariance improves computer detection and tracking of humans}
-
-
 \subsubsection{Sigma set}\label{sigmaset}
 \cite{Chang2009} proposes a novel 2nd-order statistics based region descriptor, named "Sigma Set", in the form of a small set of vectors, which can be uniquely constructed through Cholesky decomposition on the covariance matrix.
 This is basically an optimized form of region covariance using sparsity.
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{images/sigmaset-fig1}
+\caption{an image using $4\times 4$ covariance. "F.E."(feature extraction), "Stat" and "COV"}
+\label{fig:sigmaset-fig1}
+\end{figure}
 
-for any matrix $A$ that satisfies $C_R=AA^T$, the set of columns of $A$ has the same 2nd order statistics as $R$. More specifically, we can construct the Sigma Set descriptor for region $R$ through Cholesky decomposition...
+For any matrix $A$ that satisfies $C_R=AA^T$, the set of columns of $A$ has the same 2nd order statistics as $R$. More specifically, we can construct the Sigma Set descriptor for region $R$ through Cholesky decomposition ($\mathbf{C} = \mathbf{L}\mathbf{L}^{\tiny{T}}$)  which is unique for SPD:
+\begin{equation}
+ S = \{\mathbf{L}_1, \cdots, \mathbf{L}_d, \mathbf{-L}_1, \cdots, \mathbf{-L}_d\}
+\end{equation}
+where $\mathbf{L}_i$ is th \textit{i}th column of $\sqrt{d}\times\mathbf{L}$.
 
 An example application of sigma-set \cite{Uzair2013}.
 
@@ -61,19 +86,40 @@ Dimensionality Reduction for Sub-Window Features in Images"
 \subsubsection{Faulkner2015}
 \cite{Faulkner2015} "A Study of the Region Covariance Descriptor: Impact of Feature Selection and Image Transformations"
 
-\subsection{K-means}
+%
+% Super-pixels
+%
+\newpage
+\section{Super-pixels}
 
-\subsubsection{Balanced K-means}
-\cite{Malinen2014} 
-in k-means assignment phase, the algorithm solves the assignment problem by Hungarian algorithm with time complexity $O(n^3)$.
+\subsection{SLIC}
+\cite{Achanta2012} this is a more efficient form of Superpixel. I have used this
+in my previous work.
 
-\subsubsection{Balanced K-means \& min-cut}
-\cite{Chang2014}
+\subsection{Superpixel and salient objects}
+\cite{He2015} "SuperCNN: A Superpixelwise Convolutional Neural Network for Salient Object Detection"
 
-\subsection{Non-Local Means}
-\subsubsection{Qian2013}
+%
+% Non-local Means
+%
+\newpage
+\section{Non-Local Means}
+\subsection{Qian2013}
 \cite{Qian2013} 
 nonlocal similarity and spectral-spatial structure of hyperspectral imagery into sparse representation. Non-locality means the self-similarity of image, by which a whole image can be partitioned into some groups containing similar patches. The similar patches in each group are sparsely represented with a shared subset of atoms in a dictionary making true signal and noise more easily separated.
 
-\subsubsection{Fu2017}
+\subsection{Fu2017}
 \cite{Fu2017}
+
+%
+% K-means
+%
+\newpage
+\section{K-means}
+
+\subsection{Balanced K-means}
+\cite{Malinen2014} 
+in k-means assignment phase, the algorithm solves the assignment problem by Hungarian algorithm with time complexity $O(n^3)$.
+
+\subsection{Balanced K-means \& min-cut}
+\cite{Chang2014}
